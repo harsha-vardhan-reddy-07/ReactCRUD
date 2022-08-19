@@ -10,8 +10,6 @@ const initialState = {
   mobile:"",
 }
 
-
-
 const AddEdit = () => {
 
   const [state, setState] = useState(initialState);
@@ -23,21 +21,20 @@ const AddEdit = () => {
       email:'',
       mobile:''
     });
-  }
+  } //to clear form after submit
 
   const {name, email, mobile} = state;
 
-  let navigate = useNavigate();
+  let navigate = useNavigate(); //initialize navigate (to redirect to home page after submitting form)
 
   const handleInputChange = (e) => {
     const {name, value} = e.target;
     setState({...state, [name]: value});
-  };
+  }; //functionality on inserting input to forms
 
-  
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (e) => {  //functionality on submit
+    e.preventDefault(); //stops refreshing the page on submit
     if(!name || !email || !mobile){
       toast.error("Please fill all the required fields");
     } else{
@@ -47,7 +44,7 @@ const AddEdit = () => {
         } else {
           toast.success("Data Added!!");
         }
-      });
+      });  //insert data into firebase
       clearForm();
       navigate('/');
     }
