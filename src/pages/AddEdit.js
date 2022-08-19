@@ -2,7 +2,9 @@ import React from 'react'
 
 const AddEdit = () => {
   return (
-    <div>AddEdit</div>
+    <div>
+      <h2>Edit</h2>
+    </div>
   )
 }
 
