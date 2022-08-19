@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './AddEdit.css';
 import fireDb from '../firebase';
 import {toast} from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const initialState = {
   name:"",
@@ -13,7 +13,7 @@ const initialState = {
 const AddEdit = () => {
 
   const [state, setState] = useState(initialState);
-  //const [data, setData] = useState({});
+  const [data, setData] = useState({});
 
   const clearForm = () => {
     setState({
@@ -27,6 +27,36 @@ const AddEdit = () => {
 
   let navigate = useNavigate(); //initialize navigate (to redirect to home page after submitting form)
 
+  const {id} = useParams();
+
+  useEffect(() => {
+    fireDb.child("contacts").on("value", (snapshot) => {
+      if (snapshot.val() !== null) {
+        setData({...snapshot.val()});
+      } else{
+        setData({});
+      }
+    });
+    return () => {
+      setData({});
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if(id) {
+      setState({...data[id]});
+    }
+    else{
+      setState({...initialState});
+    }
+    return () => {
+      setState({...initialState})
+    };
+  }, [id, data]);
+
+
+
+
   const handleInputChange = (e) => {
     const {name, value} = e.target;
     setState({...state, [name]: value});
@@ -38,13 +68,24 @@ const AddEdit = () => {
     if(!name || !email || !mobile){
       toast.error("Please fill all the required fields");
     } else{
-      fireDb.child("contacts").push(state, (err) => {
-        if(err) {
-          toast.error(err);
-        } else {
-          toast.success("Data Added!!");
-        }
-      });  //insert data into firebase
+      if (!id){
+        fireDb.child("contacts").push(state, (err) => {
+          if(err) {
+            toast.error(err);
+          } else {
+            toast.success("Data Added!!");
+          }
+        });  //insert data into firebase
+      }
+      else{
+        fireDb.child(`contacts/${id}`).set(state, (err) => {
+          if(err) {
+            toast.error(err);
+          } else {
+            toast.success("Data Updated!!");
+          }
+        }); 
+      }
       clearForm();
       navigate('/');
     }
@@ -55,15 +96,15 @@ const AddEdit = () => {
       <form onSubmit={handleSubmit}  style={{margin: "auto", padding: "15px", maxWidth:"400px", alignContent: "center"}} >
 
         <label htmlFor="name">Name</label>
-        <input type="text" id='name' name='name' placeholder='Enter your name' value={name} onChange={handleInputChange} />
+        <input type="text" id='name' name='name' placeholder='Enter your name' value={name || ""} onChange={handleInputChange} />
 
         <label htmlFor="email">Email</label>
-        <input type="email" id='email' name='email' placeholder='Enter your Email' value={email} onChange={handleInputChange} />
+        <input type="email" id='email' name='email' placeholder='Enter your Email' value={email || ""} onChange={handleInputChange} />
 
         <label htmlFor="mobile">Mobile</label>
-        <input type="number" id='mobile' name='mobile' placeholder='Enter your mobile' value={mobile} onChange={handleInputChange} />
+        <input type="number" id='mobile' name='mobile' placeholder='Enter your mobile' value={mobile || ""} onChange={handleInputChange} />
 
-        <input type="submit" value="Save" />
+        <input type="submit" value={id ? "Update" : "Save"} />
 
       </form>
     </div>
