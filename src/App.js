@@ -5,8 +5,9 @@ import AddEdit from './pages/AddEdit';
 import Home from './pages/Home';
 import About from './pages/About';
 import View from './pages/View';
+import NoPageFound from './pages/NoPageFound'
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
 
@@ -23,14 +24,16 @@ function App() {
         
         <Routes>
           <Route exact path="/" element={<Home />}/>
-          <Route exact path="/add" element={<AddEdit />} />
-          <Route exact path="/update/:id" element={<AddEdit />} />
-          <Route exact path="/view/:id" element={<View />} />
-          <Route exact path="/about" element={<About />} />
+          <Route path="/add" element={<AddEdit />} />
+          <Route path="/update/:id" element={<AddEdit />} />
+          <Route path="/view/:id" element={<View />} />
+          <Route path="/about" element={<About />} />
+          <Route path='*' element={<NoPageFound/>}/> 
+          {/* for all the remaining pages */}
         </Routes>
 
         
-        <ToastContainer />
+        <ToastContainer position='top-center'/>
       </div>
     </BrowserRouter>
   );

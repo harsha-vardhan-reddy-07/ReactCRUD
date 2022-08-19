@@ -1,6 +1,5 @@
-import firebase from "firebase/app";
-import "firebase/database";
-import { getAnalytics } from "firebase/analytics";
+import firebase from "firebase/compat/app";
+import "firebase/compat/database";
 
 
 const firebaseConfig = {
@@ -14,6 +13,5 @@ const firebaseConfig = {
   };
 
   const fireDb = firebase.initializeApp(firebaseConfig);
-  export default fireDb.database().ref();
-  const analytics = getAnalytics(app); 
-
+  export default fireDb.database("https://reactcrud-07-default-rtdb.asia-southeast1.firebasedatabase.app/").ref();
+//in the above line, we need to export it to make it available for other pages. we need to insert "database link" in "database()"
