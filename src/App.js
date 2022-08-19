@@ -8,6 +8,7 @@ import View from './pages/View';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Header from './components/Header';
 
 
 
@@ -18,6 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
+        <Header />
         
         <Routes>
           <Route exact path="/" element={<Home />}/>
