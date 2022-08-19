@@ -15,13 +15,13 @@ const AddEdit = () => {
   const [state, setState] = useState(initialState);
   const [data, setData] = useState({});
 
-  const clearForm = () => {
+  const clearForm = () => { //to clear form after submit
     setState({
       name:'',
       email:'',
       mobile:''
     });
-  } //to clear form after submit
+  } 
 
   const {name, email, mobile} = state;
 
@@ -54,6 +54,7 @@ const AddEdit = () => {
     };
   }, [id, data]);
 
+  //Above useEffect is used to fetch & display data in update form
 
 
 
@@ -68,16 +69,16 @@ const AddEdit = () => {
     if(!name || !email || !mobile){
       toast.error("Please fill all the required fields");
     } else{
-      if (!id){
+      if (!id){  //insert data into firebase
         fireDb.child("contacts").push(state, (err) => {
           if(err) {
             toast.error(err);
           } else {
             toast.success("Data Added!!");
           }
-        });  //insert data into firebase
+        });  
       }
-      else{
+      else{ //update data
         fireDb.child(`contacts/${id}`).set(state, (err) => {
           if(err) {
             toast.error(err);
